@@ -1,6 +1,12 @@
 package com.cetc28.seu.rdf;
 
-public class RDF {
+import java.io.Serializable;
+
+public class RDF implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Term subject;
 	private Term predict;
 	private Term object;

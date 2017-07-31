@@ -1,0 +1,28 @@
+IPC Client (1730704097) connection to ubuntu3/223.3.80.34:60020 from Think: wrote request header call_id: 89 method_name: "Scan" request_param: true
+IPC Client (1730704097) connection to ubuntu3/223.3.80.34:60020 from Think: got response header call_id: 89, totalSize: 13 bytes
+IPC Client (1730704097) connection to ubuntu3/223.3.80.34:60020 from Think: wrote request header call_id: 90 method_name: "Scan" request_param: true priority: 100
+IPC Client (1730704097) connection to ubuntu3/223.3.80.34:60020 from Think: got response header call_id: 90 cell_block_meta { length: 19497 }, totalSize: 19602 bytes
+IPC Client (1730704097) connection to ubuntu3/223.3.80.34:60020 from Think: wrote request header call_id: 91 method_name: "Scan" request_param: true priority: 100
+IPC Client (1730704097) connection to ubuntu3/223.3.80.34:60020 from Think: got response header call_id: 91, totalSize: 9 bytes
+Stopping catalog tracker org.apache.hadoop.hbase.catalog.CatalogTracker@b0994b3
+Closing session: 0x35d8cf410090028
+Closing client for session: 0x35d8cf410090028
+Reading reply sessionid:0x35d8cf410090028, packet:: clientPath:null serverPath:null finished:false header:: 3,-11  replyHeader:: 3,193273528492,0  request:: null response:: null
+Disconnecting client for session: 0x35d8cf410090028
+An exception was thrown while closing send thread for session 0x35d8cf410090028 : Unable to read additional data from server sessionid 0x35d8cf410090028, likely server has closed socket
+Session: 0x35d8cf410090028 closed
+EventThread shut down
+IPC Client (1730704097) connection to ubuntu3/223.3.80.34:60020 from Think: wrote request header call_id: 8 method_name: "Scan" request_param: true
+IPC Client (1730704097) connection to ubuntu3/223.3.80.34:60020 from Think: got response header call_id: 8 exception { exception_class_name: "org.apache.hadoop.hbase.NotServingRegionException" stack_trace: "org.apache.hadoop.hbase.NotServingRegionException: Region KG_729,5000,1501292847747.31e327f9865467777627ca443b7a1a91. is not online on ubuntu3,60020,1501250487287\n\tat org.apache.hadoop.hbase.regionserver.HRegionServer.getRegionByEncodedName(HRegionServer.java:2860)\n\tat org.apache.hadoop.hbase.regionserver.HRegionServer.getRegion(HRegionServer.java:4528)\n\tat org.apache.hadoop.hbase.regionserver.HRegionServer.scan(HRegionServer.java:3246)\n\tat org.apache.hadoop.hbase.protobuf.generated.ClientProtos$ClientService$2.callBlockingMethod(ClientProtos.java:32492)\n\tat org.apache.hadoop.hbase.ipc.RpcServer.call(RpcServer.java:2193)\n\tat org.apache.hadoop.hbase.ipc.CallRunner.run(CallRunner.java:104)\n\tat org.apache.hadoop.hbase.ipc.RpcExecutor.consumerLoop(RpcExecutor.java:133)\n\tat org.apache.hadoop.hbase.ipc.RpcExecutor$1.run(RpcExecutor.java:108)\n\tat java.lang.Thread.run(Thread.java:745)\n" do_not_retry: false }, totalSize: 953 bytes
+Reading reply sessionid:0x15d8cf440210017, packet:: clientPath:null serverPath:null finished:false header:: 4,4  replyHeader:: 4,193273528494,0  request:: '/hbase/table/KG_729,F  response:: #ffffffff000146d61737465723a363030303064781e73ffffffcafffffffdffffffc61f5042554680,s{188978561240,188978561257,1501292835351,1501292836109,2,0,0,0,31,0,188978561240} 
+Reading reply sessionid:0x15d8cf440210017, packet:: clientPath:null serverPath:null finished:false header:: 5,4  replyHeader:: 5,193273528494,0  request:: '/hbase/meta-region-server,F  response:: #ffffffff0001a726567696f6e7365727665723a3630303230ffffff84ffffffbbffffff964042ffffffd0ffffffedffffffbf50425546a14a77562756e74753310fffffff4ffffffd4318fffffff7ffffff87ffffff82ffffffccffffffd82b100183,s{180388626460,180388626460,1501250499937,1501250499937,0,0,0,0,61,0,180388626460} 
+Removed ubuntu3:60020 as a location of KG_729,5000,1501292847747.31e327f9865467777627ca443b7a1a91. for tableName=KG_729 from cache
+IPC Client (1730704097) connection to ubuntu3/223.3.80.34:60020 from Think: wrote request header call_id: 9 method_name: "Get" request_param: true priority: 0
+IPC Client (1730704097) connection to ubuntu3/223.3.80.34:60020 from Think: got response header call_id: 9, totalSize: 459 bytes
+IPC Client (1730704097) connection to ubuntu3/223.3.80.34:60020 from Think: wrote request header call_id: 10 method_name: "Scan" request_param: true
+IPC Client (1730704097) connection to ubuntu3/223.3.80.34:60020 from Think: got response header call_id: 10, totalSize: 13 bytes
+IPC Client (1730704097) connection to ubuntu3/223.3.80.34:60020 from Think: wrote request header call_id: 11 method_name: "Scan" request_param: true priority: 0
+IPC Client (1730704097) connection to ubuntu3/223.3.80.34:60020 from Think: got response header call_id: 11 cell_block_meta { length: 386 }, totalSize: 414 bytes
+IPC Client (1730704097) connection to ubuntu3/223.3.80.34:60020 from Think: wrote request header call_id: 12 method_name: "Scan" request_param: true priority: 0
+IPC Client (1730704097) connection to ubuntu3/223.3.80.34:60020 from Think: got response header call_id: 12, totalSize: 9 bytes
+IPC Client (1730704097) connection to ubuntu3/223.3.80.34:60020 from Think: wrote request header call_id: 13 method_name: "Multi" request_param: true priority: 0

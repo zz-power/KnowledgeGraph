@@ -1,6 +1,12 @@
 package com.cetc28.seu.rdf;
 
-public class Constant implements Term{
+import java.io.Serializable;
+
+public class Constant implements Term,Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String value;
 
 	public Constant(String value) {
@@ -40,7 +46,6 @@ public class Constant implements Term{
 	}
 
 	public boolean isVariable() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

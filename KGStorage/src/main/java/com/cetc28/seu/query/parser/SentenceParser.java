@@ -10,10 +10,17 @@ import com.cetc28.seu.rdf.Variable;
 
 
 
+/**
+ * @author yaosheng
+ */
 public class SentenceParser {
 	private static String rdf="<.*,.*,.*>";
 	private static String rdfPattern="("+rdf+","+")"+"*"+rdf;
 	
+	/**
+	 * @param sentence
+	 * @return
+	 */
 	public static List<RDF> parser(String sentence){
 		List<RDF> rdfs=new ArrayList<>();
 		System.out.println(rdfPattern);

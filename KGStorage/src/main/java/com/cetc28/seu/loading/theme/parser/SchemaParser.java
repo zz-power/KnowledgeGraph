@@ -14,6 +14,11 @@ import com.cetc28.seu.loading.theme.output.ParserWriter;
 
 
 
+/**
+ * Description : the schema of theme's parse
+ * @author yaosheng
+ *
+ */
 public class SchemaParser extends Parser{
 	private String themeName="";
 	private int id=0;
@@ -22,6 +27,12 @@ public class SchemaParser extends Parser{
 	public SchemaParser(ParserWriter writer){
 		this.writer=writer;
 	}
+	/**
+	 * Description : use dfs search all  classes
+	 * @param type
+	 * @param curClassName
+	 * @param parent
+	 */
 	public void dfs(Class<?> type,String curClassName,String parent){
 		int cur=id;
 		HashMap<String,String> objects=new HashMap<>();

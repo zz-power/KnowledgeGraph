@@ -1,6 +1,12 @@
 package com.cetc28.seu.rdf;
 
-public class Variable implements Term{
+import java.io.Serializable;
+
+public class Variable implements Term,Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String value;
 
 	public Variable(String value) {
@@ -43,7 +49,6 @@ public class Variable implements Term{
 	}
 
 	public boolean isVariable() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 

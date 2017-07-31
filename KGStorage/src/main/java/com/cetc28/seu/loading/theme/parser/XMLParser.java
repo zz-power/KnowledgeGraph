@@ -1,7 +1,9 @@
 package com.cetc28.seu.loading.theme.parser;
 
 import java.io.File;
+
 import java.util.HashMap;
+
 import java.util.Set;
 
 
@@ -10,10 +12,19 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+/**
+ * Description : parser the xml relation to theme, get the map of themeName and themeClass
+ * @author yaosheng
+ *
+ */
 public class XMLParser {
 	SAXReader reader=new SAXReader();
-	HashMap<String,String> tagAndValue=new HashMap<>();
-	
+	HashMap<String,String> tagAndValue=new HashMap<>();	
+	/**
+	 * Description : parser all files in path
+	 * @param path
+	 * @param maps
+	 */
 	public void patchParse(String path,HashMap<String,String> maps){
 		File root = new File(path);
 		File[] files=root.listFiles();
@@ -23,6 +34,11 @@ public class XMLParser {
 	}
 	
 	
+	/**
+	 * Description : parser alone xml file
+	 * @param file
+	 * @param maps
+	 */
 	public void XmlAloneFileParse(File file,HashMap<String,String> maps){
 		Document document;
 		try {
@@ -40,6 +56,10 @@ public class XMLParser {
 		
 	}
 	
+	/**
+	 * @param file
+	 * @param tags : get the value of every tag in tags
+	 */
 	public void XmlAloneFileParse(File file,String ... tags){
 		Document document;
 		try {

@@ -4,50 +4,46 @@ import java.util.HashMap;
 
 /**
  * @author yaosheng
- *
  */
 public class Property {
-	private HashMap<String,String> basePro; //基础属性类型 （属性名，值）
 	private String parent;
-	private HashMap<String,String> childObj; // 对象属性 (属性名 ， id)
-	private HashMap<String,String> arrayObj; // 对象数组属性 (属性名 ， id集合)
 	private String oid;
 	private String type;
+	private String[] families={"attributes","objects","array_objects"};
+	private HashMap<String, String> basePro;
+	
+	private HashMap<String,HashMap<String,String>> property;
+	public HashMap<String, HashMap<String, String>> getProperty() {
+		return property;
+	}
+
+
+	public void setProperty(HashMap<String, HashMap<String, String>> property) {
+		this.property = property;
+	}
+
 
 	public Property(HashMap<String, String> basePro, String parent, HashMap<String, String> childObj,
 			HashMap<String, String> arrayObj, String oid,String type) {
 		super();
-		this.basePro = basePro;
 		this.parent = parent;
-		this.childObj = childObj;
-		this.arrayObj = arrayObj;
 		this.oid = oid;
 		this.type=type;
+		this.basePro=basePro;
+		property=new HashMap<>();
+		property.put(families[0], basePro);
+		property.put(families[1], childObj);
+		property.put(families[2], arrayObj);
 	}
-	public HashMap<String, String> getBasePro() {
-		return basePro;
-	}
-	public void setBasePro(HashMap<String, String> basePro) {
-		this.basePro = basePro;
-	}
+
+	
 	public String getParent() {
 		return parent;
 	}
 	public void setParent(String parent) {
 		this.parent = parent;
 	}
-	public HashMap<String, String> getChildObj() {
-		return childObj;
-	}
-	public void setChildObj(HashMap<String, String> childObj) {
-		this.childObj = childObj;
-	}
-	public HashMap<String, String> getArrayObj() {
-		return arrayObj;
-	}
-	public void setArrayObj(HashMap<String, String> arrayObj) {
-		this.arrayObj = arrayObj;
-	}
+	
 	
 	public String getOid() {
 		return oid;
@@ -61,18 +57,20 @@ public class Property {
 	public void setType(String type) {
 		this.type = type;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((basePro == null) ? 0 : basePro.hashCode());
+		result = prime * result + ((basePro== null) ? 0 : basePro.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
 
+
 	@Override
 	public boolean equals(Object obj) {
+		
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -92,6 +90,5 @@ public class Property {
 			return false;
 		return true;
 	}
-	
 	
 }

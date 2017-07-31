@@ -1,7 +1,9 @@
 package com.cetc28.seu.loading.theme.model;
 
 import java.util.HashMap;
-
+/**
+ * @author yaosheng
+ */
 public class ClassRelation {
 	private String className; // 类型名
 	private HashMap<String, String> object; // 保存属性名 和类型
@@ -9,7 +11,12 @@ public class ClassRelation {
 	private String parent; // 父类型名
 	private HashMap<String, String> baseProperty; //保存基础属性(属性名 ， 类型)
 	private int id; // hbase 中的rowkey 对语义无帮助
-	private String themeName;//所属主题
+	private String themeName;//
+
+	public ClassRelation() {
+	
+
+	}
 
 	public ClassRelation(String className, HashMap<String, String> object, HashMap<String, String> arrayObject,
 			String parent, HashMap<String, String> baseProperty,int id,String themeName) {

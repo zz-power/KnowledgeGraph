@@ -15,8 +15,18 @@ import com.cetc28.seu.rdf.RDF;
 import com.cetc28.seu.rdf.Term;
 
 
+/**
+ * @author yaosheng
+ * 
+ */
 public class ConstructQueryPlan {
-	public  static com.cetc28.seu.query.struct.QueryPlan plan(List<RDF> rdfs){
+	
+	/**
+	 * @param rdfs
+	 * @return
+	 * 
+	 */
+	public  static QueryPlan plan(List<RDF> rdfs){
 		com.cetc28.seu.query.struct.QueryPlan queryPlan=null;
 		Set<Term> subjectSet=new HashSet<Term>();
 		RDF joiner = null;
@@ -50,12 +60,12 @@ public class ConstructQueryPlan {
 		}
 		QueryCondition subject=null;
 		QueryCondition object=null;
-		//通过sameSubject 构成出 Filter
+		
 		for(Map.Entry<Term, List<RDF>> entry : sameSubject.entrySet()){
 			if(joiner==null ) System.out.println("error !");
-			String family="attributes";
-			HashMap<String,String> conditions = new HashMap<>();//查询使用的条�? 列名 和�??
-			List<String> answer=new ArrayList<>();//�?要查询的列名
+			//String family="attributes";
+			HashMap<String,String> conditions = new HashMap<>();
+			List<String> answer=new ArrayList<>();
 			List<RDF> filter=entry.getValue();
 			for(RDF rdf : filter){
 				Constant predict=(Constant) rdf.getPredict();
@@ -64,9 +74,9 @@ public class ConstructQueryPlan {
 				else answer.add(predict.getValue());
 			}
 			if(entry.getKey().equals(joiner.getSubject())){
-				subject=new QueryCondition(family, conditions, answer);
+				subject=new QueryCondition(conditions);
 			}else{
-				object=new QueryCondition(family, conditions, answer);
+				object=new QueryCondition(conditions);
 			}
 		}
 		Constant joinerPre=(Constant)joiner.getPredict();

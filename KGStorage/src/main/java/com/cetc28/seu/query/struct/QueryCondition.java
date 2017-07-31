@@ -1,28 +1,36 @@
 package com.cetc28.seu.query.struct;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 
-public class QueryCondition implements QueryElement{
-	private String family;
-	private HashMap<String,String> conditions;//查询使用的条�? 列名 和�??
-	private List<String> answer;//�?要查询的列名
+import com.cetc28.seu.rdf.RDF;
+
+public class QueryCondition implements QueryElement,Serializable{
+
+	private static final long serialVersionUID = 1L;
+	private static final String family="attributes";
+	private HashMap<String,String> conditions;//查询使用的条件 列名 和值
+	//查询?s attributes:age ?o的情况,根据列名
+	private RDF rdf;
+	@Deprecated
+	private List<String> answer;//要查询的列名
 	
-	
-	public QueryCondition(String family, HashMap<String, String> conditions, List<String> answer) {
+	public QueryCondition(RDF rdf)
+	{
 		super();
-		this.family = family;
+		this.rdf = rdf;
+	}
+	
+	public QueryCondition(HashMap<String, String> conditions) {
+		super();
 		this.conditions = conditions;
-		this.answer = answer;
 	}
 
 	public String getFamily() {
 		return family;
 	}
 
-	public void setFamily(String family) {
-		this.family = family;
-	}
 
 	public HashMap<String, String> getConditions() {
 		return conditions;
@@ -30,6 +38,14 @@ public class QueryCondition implements QueryElement{
 
 	public void setConditions(HashMap<String, String> conditions) {
 		this.conditions = conditions;
+	}
+
+	public RDF getRdf() {
+		return rdf;
+	}
+
+	public void setRdf(RDF rdf) {
+		this.rdf = rdf;
 	}
 
 	public List<String> getAnswer() {

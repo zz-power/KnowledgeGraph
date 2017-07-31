@@ -3,7 +3,7 @@ package com.cetc28.seu.query.struct;
 public class Joiner implements QueryElement{
 
 	private String familiy;
-	private String predict;// 属�?�名，即查询的列�?
+	private String predict;
 	
 	
 	public Joiner(String familiy, String predict) {

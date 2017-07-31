@@ -5,29 +5,40 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Random;
 
-
+import com.cetc28.seu.loading.theme.model.EquivalentObject;
 import com.cetc28.seu.loading.theme.model.Property;
 import com.cetc28.seu.loading.theme.output.ParserWriter;
 
 
-
-
-
-
 /**
+ * Description : parse the nested obj
  * @author yaosheng
  */
 public class ObjectParser extends Parser{
-	private long id=0;
+	//private int id;
 	private String themeName;
 	private ParserWriter writer;
 	
 	public ObjectParser(ParserWriter writer) {
 		super();
+		//this.id=0;
 		this.writer = writer;
+	}
+	
+	private String constructRowId(long id, String themeName){
+		String rowid=themeName+":"+String.valueOf(id);
+		
+		return rowid;
+	}
+	
+	@SuppressWarnings("unused")
+	private String construceRowId(long id, String themeName, int min,int max){//随机生成4位值使其均匀分布在 不同region
+		Random random = new Random();
+	    int s = random.nextInt(max)%(max-min+1) + min;
+		String rowid=String.valueOf(s)+":"+themeName+":"+String.valueOf(id);
+		return rowid;
 	}
 	
 	/**
@@ -37,105 +48,138 @@ public class ObjectParser extends Parser{
 	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
 	 */
-	public void dfs(Object obj,Class<?> type,long parent) throws IllegalArgumentException, IllegalAccessException{
+	public int dfs(Object obj,Class<?> type,long parent) throws IllegalArgumentException, IllegalAccessException{
 		
 		Field[] attrs=type.getDeclaredFields();
 		HashMap<String,String> arrayChild=new HashMap<>();
 		HashMap<String,String> childObj=new HashMap<>();
 		HashMap<String,String> basePro=new HashMap<>();
-		long cur=id;
-		for(Field attr : attrs){//遍历所有属性
+		
+		//先构造出所有基础属性,已便生成id(通过hashcode)
+		for(Field attr: attrs){
 			attr.setAccessible(true);
 			Class<?> attrtype = attr.getType();
-			String attrname=attr.getName();
 			Object attrValue=attr.get(obj);
-			if(attrValue==null) return;
-			if(isArray(attrtype)){//如果是数组
-				if(!isBaseArray(attrtype)){//如果是对象数组
-					Object[] arrayValue=(Object[]) attrValue;
-					String value="";
-					for(Object everyObj : arrayValue){
-						id++;
-						dfs(everyObj,everyObj.getClass(),cur);
-						String idTheme=String.valueOf(id)+themeName;
-						value=value+idTheme+" ";
-					}
-					arrayChild.put(attrname, value);
-				}else{//如果是基础类型的数组
-					String value="";
-					for(int i=0;i<Array.getLength(attrValue);i++){
-						value=value+Array.get(attrValue, i)+" ";
-					}
-					basePro.put(attrname, value);
+			String attrname=attr.getName();
+			//System.out.println("attrvalue: " + attrValue);
+			if(isArray(attrtype)&& isBaseArray(attrtype)){
+				String value="";
+				for(int i=0;i<Array.getLength(attrValue);i++){
+					value=value+Array.get(attrValue, i)+" ";
 				}
-			}else if(isList(attrtype)){//如果是List
+				basePro.put(attrname, value);
+			}else if(isList(attrtype)){
 				ParameterizedType pt = (ParameterizedType) attr.getGenericType() ;
 				Class<?> clz = (Class<?>) pt.getActualTypeArguments()[0];
 				List<?> listValue=(List<?>) attrValue;
-				if(isObject(clz)){//list中保存的是对象
-					for(Object listObj : listValue){
-						id++;
-						dfs(listObj,clz,cur);
-					}
-				}
-				else{//保存的是基础类型
+				if(!isObject(clz)){
 					String value="";
 					for(Object ev : listValue){
 						value=value+String.valueOf(ev)+" ";
 					}
 					basePro.put(attrname, value);
 				}
-			}else if(isObject(attrtype)){// 该属性是对象
-				Object child=attr.get(obj);
-				id++;
-				childObj.put(attrname, String.valueOf(id)+themeName);
-				dfs(child,attrtype,cur);
-			}
-			else {
+			}else if(!isObject(attrtype)&& (!isArray(attrtype))){
 				basePro.put(attrname, String.valueOf(attrValue));
 			}
 		}
-		Property prop=new Property(basePro, String.valueOf(id)+themeName, childObj, arrayChild,Long.toString(cur)+themeName,type.getSimpleName());
-		writer.writer(prop);
+		
+		int cur=hashcode(basePro,type.getSimpleName());
+		for(Field attr : attrs){//遍历所有属性
+			attr.setAccessible(true);
+			Class<?> attrtype = attr.getType();
+			String attrname=attr.getName();
+			Object attrValue=attr.get(obj);
+			if(attrValue==null) continue;
+			if(isArray(attrtype)){//如果是数组
+				if(!isBaseArray(attrtype)){//如果是对象数组
+					Object[] arrayValue=(Object[]) attrValue;
+					String value="";
+					for(Object everyObj : arrayValue){
+						int childId=dfs(everyObj,everyObj.getClass(),cur);
+						String idTheme=constructRowId(childId,themeName);
+						value=value+idTheme+" ";
+					}
+					arrayChild.put(attrname, value);
+				}else{//如果是基础类型的数组
+					/*String value="";
+					for(int i=0;i<Array.getLength(attrValue);i++){
+						value=value+Array.get(attrValue, i)+" ";
+					}
+					basePro.put(attrname, value);*/
+				}
+			}else if(isList(attrtype)){//如果是List
+				ParameterizedType pt = (ParameterizedType) attr.getGenericType() ;
+				Class<?> clz = (Class<?>) pt.getActualTypeArguments()[0];
+				List<?> listValue=(List<?>) attrValue;
+				if(isObject(clz)){//list中保存的是对象
+					String value="";
+					for(Object listObj : listValue){
+						int childId=dfs(listObj,clz,cur);
+						String idTheme=constructRowId(childId,themeName);
+						value=value+idTheme+" ";
+					}
+					arrayChild.put(attrname, value);
+				}
+				else{//保存的是基础类型
+					/*String value="";
+					for(Object ev : listValue){
+						value=value+String.valueOf(ev)+" ";
+					}
+					basePro.put(attrname, value);*/
+				}
+			}else if(isObject(attrtype)){// 该属性是对象
+				Object child=attr.get(obj);
+				int childid=dfs(child,attrtype,cur);
+				childObj.put(attrname, constructRowId(childid,themeName));
+			}
+			else {
+			/*	basePro.put(attrname, String.valueOf(attrValue));*/
+			}
+		}
+		Property prop=new Property(basePro, constructRowId(parent,themeName), childObj, arrayChild,constructRowId(cur,themeName),type.getSimpleName());
+		
+		if(!EquivalentObject.isExist(cur)){//如果不存在相同的对象，写入hbase
+			writer.writer(prop);
+			System.out.println("prop111: " + prop);
+		}else{//如果存在相同的对象，需要更新hbase数据
+			writer.update(prop);
+			System.out.println("prop222: " + prop);
+		}
+		return cur;
 	}
 	
-	public void extractTreeObj(List<Object> objs,Class<?> type,String themeName) throws IllegalArgumentException, IllegalAccessException{
+	public void extractTreeObj(List<Object> objs,Class<?> type,String themeName) {
 		this.themeName=themeName;
 		for(Object obj : objs){
-			dfs(obj,type,-1);
-			id++;
+			try {
+				dfs(obj,type,-1);
+				//id++;
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				e.printStackTrace();
+			}
 		}
+		writer.flush();
 	}
 	public void writerToHbase(Property prop,String themeName){
 		System.out.println("oid : " +prop.getOid()+" parentid : " +prop.getParent()+" type : "+prop.getType());
-		
-		for(Map.Entry<String, String>  basePro : prop.getBasePro().entrySet()){
-			System.out.println("base prop 'key : "+basePro.getKey()+" , "+basePro.getValue());
-		}
-		for(Map.Entry<String, String> objectProp : prop.getChildObj().entrySet()){
-			System.out.println("child prop 'key : "+objectProp.getKey()+" , "+objectProp.getValue());
-		}
-		for(Entry<String, String> arrayProp : prop.getArrayObj().entrySet()){
-			System.out.println("array prop 'key : "+arrayProp.getKey()+" , "+arrayProp.getValue());
-		}
-		System.out.println("\n\n");
+
 	}
-	public void updateToHbase(Property prop,String themeName){
+	public void updateToHbase(Property prop){
 		// 1. 查出 Hbase 中相同的prop 
 		// 2. 修改 该 prop中的  sameAs 列
 		// 3. 将该prop写入 Hbase
 		System.out.println("need updated object : ");
-		System.out.println("oid : " +prop.getOid()+" parentid : " +prop.getParent()+" type : "+prop.getType());
-		for(Map.Entry<String, String>  basePro : prop.getBasePro().entrySet()){
-			System.out.println("base prop 'key : "+basePro.getKey()+" , "+basePro.getValue());
-		}
-		for(Map.Entry<String, String> objectProp : prop.getChildObj().entrySet()){
-			System.out.println("child prop 'key : "+objectProp.getKey()+" , "+objectProp.getValue());
-		}
-		for(Entry<String, String> arrayProp : prop.getArrayObj().entrySet()){
-			System.out.println("array prop 'key : "+arrayProp.getKey()+" , "+arrayProp.getValue());
-		}
+		
 		System.out.println("\n\n");
+	}
+	
+	private int hashcode(HashMap<String,String> basePro, String type){
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((basePro== null) ? 0 : basePro.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
 	}
 	
 }
